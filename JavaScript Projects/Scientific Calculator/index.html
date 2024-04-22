@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scientific Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #calculator {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+      }
+
+      #output {
+        background-color: #eee;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        text-align: right;
+        font-size: 2em;
+      }
+
+      #history {
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+        padding: 10px;
+        height: 100px;
+        overflow-y: auto;
+        display: none;
+      }
+
+      .btn {
+        font-size: 1.5em;
+      }
+
+      .btn-function {
+        font-size: 1.2em;
+      }
+
+      .btn-bracket {
+        font-size: 1.2em;
+        background-color: #6c757d;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="calculator">
+        <div id="output">0</div>
+        <div id="history"></div>
+        <div class="row">
+          <button class="btn btn-secondary col" onclick="clearOutput()">
+            C
+          </button>
+          <button class="btn btn-secondary col" onclick="deleteLast()">
+            CE
+          </button>
+          <button class="btn btn-secondary col" onclick="toggleHistory()">
+            H
+          </button>
+          <button class="btn btn-bracket col" onclick="appendText('(')">
+            (
+          </button>
+          <button class="btn btn-bracket col" onclick="appendText(')')">
+            )
+          </button>
+        </div>
+        <div class="row">
+          <button class="btn btn-function col" onclick="appendText('**')">
+            ^
+          </button>
+          <button class="btn btn-warning col" onclick="appendText('/')">
+            /
+          </button>
+          <button
+            class="btn btn-warning col"
+            onclick="appendText('Math.sqrt(')"
+          >
+            √
+          </button>
+          <button class="btn btn-warning col" onclick="appendText('Math.sin(')">
+            sin
+          </button>
+        </div>
+        <div class="row">
+          <button class="btn btn-light col" onclick="appendText('7')">7</button>
+          <button class="btn btn-light col" onclick="appendText('8')">8</button>
+          <button class="btn btn-light col" onclick="appendText('9')">9</button>
+          <button class="btn btn-warning col" onclick="appendText('*')">
+            *
+          </button>
+        </div>
+        <div class="row">
+          <button class="btn btn-light col" onclick="appendText('4')">4</button>
+          <button class="btn btn-light col" onclick="appendText('5')">5</button>
+          <button class="btn btn-light col" onclick="appendText('6')">6</button>
+          <button class="btn btn-warning col" onclick="appendText('-')">
+            -
+          </button>
+        </div>
+        <div class="row">
+          <button class="btn btn-light col" onclick="appendText('1')">1</button>
+          <button class="btn btn-light col" onclick="appendText('2')">2</button>
+          <button class="btn btn-light col" onclick="appendText('3')">3</button>
+          <button class="btn btn-warning col" onclick="appendText('+')">
+            +
+          </button>
+        </div>
+        <div class="row">
+          <button class="btn btn-light col" onclick="appendText('0')">0</button>
+          <button class="btn btn-light col" onclick="appendText('.')">.</button>
+          <button class="btn btn-warning col" onclick="calculate()">=</button>
+          <button class="btn btn-primary col" onclick="recallMemory()">
+            MR
+          </button>
+        </div>
+        <div class="row">
+          <button
+            class="btn btn-function col"
+            onclick="appendText('Math.log10(')"
+          >
+            log
+          </button>
+          <button
+            class="btn btn-function col"
+            onclick="appendText('Math.log(')"
+          >
+            ln
+          </button>
+          <button
+            class="btn btn-function col"
+            onclick="appendText('Math.exp(')"
+          >
+            e^x
+          </button>
+          <button class="btn btn-function col" onclick="appendText('Math.PI')">
+            π
+          </button>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary col" onclick="storeMemory()">
+            MS
+          </button>
+          <button class="btn btn-primary col" onclick="clearMemory()">
+            MC
+          </button>
+          <button class="btn btn-primary col" onclick="addToMemory()">
+            M+
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let history = [];
+      let memory = 0;
+
+      function appendText(value) {
+        document.getElementById("output").textContent += value;
+      }
+
+      function calculate() {
+        let result;
+        try {
+          result = eval(document.getElementById("output").textContent);
+          document.getElementById("output").textContent = result;
+          history.push({
+            calculation: document.getElementById("output").textContent,
+            result,
+          });
+          updateHistory();
+        } catch (error) {
+          document.getElementById("output").textContent = "Error";
+        }
+      }
+
+      function clearOutput() {
+        document.getElementById("output").textContent = "";
+      }
+
+      function deleteLast() {
+        let output = document.getElementById("output").textContent;
+        document.getElementById("output").textContent = output.slice(0, -1);
+      }
+
+      function storeMemory() {
+        memory = eval(document.getElementById("output").textContent);
+      }
+
+      function recallMemory() {
+        document.getElementById("output").textContent += memory;
+      }
+
+      function clearMemory() {
+        memory = 0;
+      }
+
+      function addToMemory() {
+        memory += eval(document.getElementById("output").textContent);
+      }
+
+      function toggleHistory() {
+        let historyDisplay = document.getElementById("history");
+        if (historyDisplay.style.display === "none") {
+          historyDisplay.style.display = "block";
+        } else {
+          historyDisplay.style.display = "none";
+        }
+      }
+
+      function updateHistory() {
+        let historyDisplay = document.getElementById("history");
+        historyDisplay.innerHTML = "";
+        for (let i = 0; i < history.length; i++) {
+          let entry = history[i];
+          let historyEntry = document.createElement("div");
+          historyEntry.textContent = `${entry.calculation} = ${entry.result}`;
+          historyDisplay.appendChild(historyEntry);
+        }
+      }
+    </script>
+  </body>
+</html>

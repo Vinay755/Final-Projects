@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory Management Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* Custom CSS for additional styling */
+      body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        margin-top: 50px;
+      }
+      .chart-container {
+        margin-bottom: 30px;
+      }
+      table {
+        background-color: #fff;
+      }
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #343a40;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-4">Inventory Management Dashboard</h1>
+      <div class="row mt-4">
+        <div class="col-md-6 chart-container">
+          <!-- Chart for stock levels -->
+          <canvas id="stockChart"></canvas>
+        </div>
+        <div class="col-md-6">
+          <!-- Filter and Sort Controls -->
+          <div class="mb-3">
+            <label for="sortSelect">Sort By:</label>
+            <select id="sortSelect" class="form-control">
+              <option value="stockLevel">Stock Level</option>
+              <option value="product">Product</option>
+              <option value="category">Category</option>
+            </select>
+          </div>
+          <!-- Table for product data -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Stock Level</th>
+              </tr>
+            </thead>
+            <tbody id="productTableBody">
+              <!-- Product data will be populated dynamically here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Logout button -->
+      <div class="mt-4">
+        <button class="btn btn-danger" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <!-- JavaScript for dynamic data population, chart creation, filtering, and sorting -->
+    <script>
+      // Sample inventory data (replace with actual data)
+      let inventoryData = [
+        { product: "Product 1", category: "Category A", stockLevel: 50 },
+        { product: "Product 2", category: "Category B", stockLevel: 80 },
+        { product: "Product 3", category: "Category A", stockLevel: 30 },
+        // Add more data as needed
+      ];
+
+      // Function to populate product table
+      function populateProductTable(data) {
+        const tableBody = document.getElementById("productTableBody");
+        tableBody.innerHTML = ""; // Clear previous data
+
+        data.forEach((item) => {
+          const row = `<tr>
+                      <td>${item.product}</td>
+                      <td>${item.category}</td>
+                      <td>${item.stockLevel}</td>
+                    </tr>`;
+          tableBody.innerHTML += row;
+        });
+      }
+
+      // Function to create stock level chart
+      function createStockLevelChart(data) {
+        const ctx = document.getElementById("stockChart").getContext("2d");
+        const labels = data.map((item) => item.product);
+        const stockLevels = data.map((item) => item.stockLevel);
+
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Stock Level",
+                data: stockLevels,
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                  },
+                },
+              ],
+            },
+          },
+        });
+      }
+
+      // Function to handle sorting of inventory data
+      function sortInventoryData(sortBy) {
+        inventoryData.sort((a, b) => {
+          if (a[sortBy] < b[sortBy]) return -1;
+          if (a[sortBy] > b[sortBy]) return 1;
+          return 0;
+        });
+        populateProductTable(inventoryData);
+      }
+
+      // Event listener for sort select dropdown
+      document
+        .getElementById("sortSelect")
+        .addEventListener("change", function () {
+          const sortBy = this.value;
+          sortInventoryData(sortBy);
+        });
+
+      // Function to simulate real-time updates (for demonstration purposes)
+      function simulateRealTimeUpdates() {
+        setInterval(() => {
+          // Simulate changes in stock levels
+          inventoryData.forEach((item) => {
+            item.stockLevel += Math.floor(Math.random() * 10) - 5; // Random change between -5 and +5
+          });
+
+          // Update table and chart with new data
+          populateProductTable(inventoryData);
+          createStockLevelChart(inventoryData);
+        }, 5000); // Update every 5 seconds (adjust as needed)
+      }
+
+      // Function to logout
+      function logout() {
+        // Redirect to the login page
+        window.location.href = "login.html";
+      }
+
+      // Simulate real-time updates on page load
+      window.onload = function () {
+        populateProductTable(inventoryData);
+        createStockLevelChart(inventoryData);
+        simulateRealTimeUpdates();
+      };
+    </script>
+  </body>
+</html>

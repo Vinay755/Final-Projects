@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BMI Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #bmi-calculator {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        font-size: 1.2em;
+        margin: 5px;
+      }
+
+      #result {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      #bmi-classification {
+        font-size: 1.2em;
+        color: #007bff;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="bmi-calculator">
+        <h2>BMI Calculator</h2>
+        <div class="form-group">
+          <label for="height">Height (cm):</label>
+          <input
+            type="number"
+            id="height"
+            class="form-control"
+            placeholder="Enter your height"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="weight">Weight (kg):</label>
+          <input
+            type="number"
+            id="weight"
+            class="form-control"
+            placeholder="Enter your weight"
+            required
+          />
+        </div>
+        <button class="btn btn-primary" onclick="calculateBMI()">
+          Calculate BMI
+        </button>
+        <button class="btn btn-secondary" onclick="clearInput()">Clear</button>
+        <div id="result"></div>
+        <div id="bmi-classification"></div>
+      </div>
+    </div>
+
+    <script>
+      function calculateBMI() {
+        const height = parseFloat(document.getElementById("height").value);
+        const weight = parseFloat(document.getElementById("weight").value);
+
+        if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+          document.getElementById("result").innerText =
+            "Please enter valid height and weight.";
+          document.getElementById("bmi-classification").innerText = "";
+          return;
+        }
+
+        const bmi = weight / (height / 100) ** 2;
+        const classification = getBMIClassification(bmi);
+
+        document.getElementById("result").innerText = `Your BMI: ${bmi.toFixed(
+          2
+        )}`;
+        document.getElementById(
+          "bmi-classification"
+        ).innerText = `BMI Classification: ${classification}`;
+      }
+
+      function getBMIClassification(bmi) {
+        if (bmi < 18.5) {
+          return "Underweight";
+        } else if (bmi >= 18.5 && bmi < 24.9) {
+          return "Normal weight";
+        } else if (bmi >= 24.9 && bmi < 29.9) {
+          return "Overweight";
+        } else {
+          return "Obese";
+        }
+      }
+
+      function clearInput() {
+        document.getElementById("height").value = "";
+        document.getElementById("weight").value = "";
+        document.getElementById("result").innerText = "";
+        document.getElementById("bmi-classification").innerText = "";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortener</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #url-shortener {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        font-size: 1.2em;
+        margin: 5px;
+      }
+
+      #short-url {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="url-shortener">
+        <h2>URL Shortener</h2>
+        <div class="form-group">
+          <input
+            type="text"
+            id="long-url"
+            class="form-control"
+            placeholder="Enter long URL"
+            required
+          />
+        </div>
+        <button class="btn btn-primary" onclick="shortenURL()">
+          Shorten URL
+        </button>
+        <button class="btn btn-secondary" onclick="clearInput()">Clear</button>
+        <button class="btn btn-success" onclick="copyToClipboard()">
+          Copy to Clipboard
+        </button>
+        <div id="short-url"></div>
+      </div>
+    </div>
+
+    <script>
+      function shortenURL() {
+        const longUrl = document.getElementById("long-url").value;
+
+        fetch("https://api-ssl.bitly.com/v4/shorten", {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer YOUR_ACCESS_TOKEN",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            long_url: longUrl,
+            domain: "bit.ly",
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.link) {
+              document.getElementById(
+                "short-url"
+              ).innerHTML = `<a href="${data.link}" target="_blank">${data.link}</a>`;
+            } else {
+              document.getElementById("short-url").innerText =
+                "Failed to shorten URL. Please try again later.";
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            document.getElementById("short-url").innerText =
+              "Failed to shorten URL. Please try again later.";
+          });
+      }
+
+      function copyToClipboard() {
+        const shortUrl = document.getElementById("short-url").innerText;
+        if (shortUrl) {
+          const textarea = document.createElement("textarea");
+          textarea.value = shortUrl;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+          alert("Shortened URL copied to clipboard");
+        } else {
+          alert("No shortened URL available to copy");
+        }
+      }
+
+      function clearInput() {
+        document.getElementById("long-url").value = "";
+        document.getElementById("short-url").innerText = "";
+      }
+    </script>
+  </body>
+</html>

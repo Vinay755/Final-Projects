@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Generator Tool</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      #password-generator {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+      }
+
+      #password-display {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        width: 100%;
+        word-wrap: break-word;
+        background-color: #f8f9fa;
+      }
+
+      .btn {
+        font-size: 1.2em;
+        margin: 5px;
+      }
+
+      #password-length {
+        margin-bottom: 20px;
+      }
+
+      .form-check-label {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container" id="password-generator">
+      <h2 style="font-family: Montserrat">Password Generator Tool</h2>
+      <div id="password-display">
+        Click "Generate Password" to get your password.
+      </div>
+      <div id="password-options">
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="uppercase"
+            checked
+          />
+          <label class="form-check-label" for="uppercase"
+            >Include Uppercase Letters (A-Z)</label
+          >
+        </div>
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="lowercase"
+            checked
+          />
+          <label class="form-check-label" for="lowercase"
+            >Include Lowercase Letters (a-z)</label
+          >
+        </div>
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="numbers"
+            checked
+          />
+          <label class="form-check-label" for="numbers"
+            >Include Numbers (0-9)</label
+          >
+        </div>
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="symbols"
+            checked
+          />
+          <label class="form-check-label" for="symbols"
+            >Include Symbols (!@#$%^&*_-+=)</label
+          >
+        </div>
+        <div id="password-length" class="form-group">
+          <label for="length">Password Length:</label>
+          <input
+            type="range"
+            id="length"
+            min="4"
+            max="40"
+            value="12"
+            class="form-control-range"
+            oninput="updateLength(this.value)"
+          />
+          <span id="length-value">12</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="generatePassword()">
+        Generate Password
+      </button>
+      <button class="btn btn-success" onclick="copyToClipboard()">
+        Copy to Clipboard
+      </button>
+      <button class="btn btn-danger" onclick="clearPassword()">Clear</button>
+    </div>
+
+    <script>
+      function generatePassword() {
+        const length = document.getElementById("length").value;
+        const includeUppercase = document.getElementById("uppercase").checked;
+        const includeLowercase = document.getElementById("lowercase").checked;
+        const includeNumbers = document.getElementById("numbers").checked;
+        const includeSymbols = document.getElementById("symbols").checked;
+
+        const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+        const numberChars = "0123456789";
+        const symbolChars = "!@#$%^&*_-+=";
+
+        let chars = "";
+
+        if (includeUppercase) {
+          chars += uppercaseChars;
+        }
+
+        if (includeLowercase) {
+          chars += lowercaseChars;
+        }
+
+        if (includeNumbers) {
+          chars += numberChars;
+        }
+
+        if (includeSymbols) {
+          chars += symbolChars;
+        }
+
+        let password = "";
+
+        for (let i = 0; i < length; i++) {
+          const index = Math.floor(Math.random() * chars.length);
+          password += chars[index];
+        }
+
+        document.getElementById("password-display").innerText = password;
+      }
+
+      function copyToClipboard() {
+        const password = document.getElementById("password-display").innerText;
+        const textarea = document.createElement("textarea");
+        textarea.value = password;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        alert("Password copied to clipboard");
+      }
+
+      function updateLength(value) {
+        document.getElementById("length").value = value;
+        document.getElementById("length-value").innerText = value;
+      }
+
+      function clearPassword() {
+        document.getElementById("password-display").innerText =
+          "Click 'Generate Password' to get your password.";
+      }
+    </script>
+  </body>
+</html>

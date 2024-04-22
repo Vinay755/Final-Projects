@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Inventory Management System</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- Custom CSS -->
+    <style>
+      /* Custom CSS for login.html */
+      body {
+        background-image: url("background.jpg"); /* Change 'background.jpg' to your image path */
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        margin-top: 100px;
+        text-align: center;
+      }
+      .card {
+        width: 400px;
+        margin: 0 auto;
+      }
+      .card-header {
+        background-color: #343a40;
+        color: #fff;
+      }
+      .btn {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          <h3>Login</h3>
+        </div>
+        <div class="card-body">
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript for login -->
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          // Process login (dummy logic for demonstration)
+          // Assuming successful login redirects to dashboard page
+          window.location.href = "dashboard.html";
+        });
+    </script>
+  </body>
+</html>

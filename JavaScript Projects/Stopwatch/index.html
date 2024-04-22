@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stopwatch Application</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #stopwatch {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      #display {
+        font-size: 2em;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        font-size: 1.5em;
+        margin: 5px;
+      }
+
+      #lap-times {
+        margin-top: 20px;
+        text-align: left;
+      }
+
+      #lap-times p {
+        margin: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="stopwatch">
+        <div id="display">00:00:00<span id="milliseconds">.0</span></div>
+        <button class="btn btn-success" onclick="startStopwatch()">
+          Start
+        </button>
+        <button class="btn btn-danger" onclick="stopStopwatch()">Stop</button>
+        <button class="btn btn-warning" onclick="resetStopwatch()">
+          Reset
+        </button>
+        <button class="btn btn-primary" onclick="recordLapTime()">Lap</button>
+        <div id="lap-times"></div>
+      </div>
+    </div>
+
+    <script>
+      let timer;
+      let milliseconds = 0,
+        seconds = 0,
+        minutes = 0,
+        hours = 0;
+      let lapCount = 1;
+
+      function startStopwatch() {
+        if (!timer) {
+          timer = setInterval(runStopwatch, 100);
+        }
+      }
+
+      function runStopwatch() {
+        milliseconds++;
+        if (milliseconds === 10) {
+          milliseconds = 0;
+          seconds++;
+        }
+        if (seconds === 60) {
+          seconds = 0;
+          minutes++;
+        }
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
+        }
+
+        displayTime();
+      }
+
+      function stopStopwatch() {
+        clearInterval(timer);
+        timer = false;
+      }
+
+      function resetStopwatch() {
+        clearInterval(timer);
+        timer = false;
+        milliseconds = 0;
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        lapCount = 1;
+        displayTime();
+        document.getElementById("lap-times").innerHTML = "";
+      }
+
+      function recordLapTime() {
+        let currentTime = getFormattedTime();
+        let lapTime = document.createElement("p");
+        lapTime.innerHTML = `Lap ${lapCount}: ${currentTime}`;
+        document.getElementById("lap-times").appendChild(lapTime);
+        lapCount++;
+      }
+
+      function displayTime() {
+        let formattedTime = getFormattedTime();
+        document.getElementById("display").innerHTML = formattedTime;
+        document.getElementById("milliseconds").innerText = `.${milliseconds}`;
+      }
+
+      function getFormattedTime() {
+        let formattedMilliseconds =
+          (milliseconds < 10 ? "0" : "") + milliseconds;
+        let formattedSeconds = (seconds < 10 ? "0" : "") + seconds;
+        let formattedMinutes = (minutes < 10 ? "0" : "") + minutes;
+        let formattedHours = (hours < 10 ? "0" : "") + hours;
+        return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+      }
+    </script>
+  </body>
+</html>
