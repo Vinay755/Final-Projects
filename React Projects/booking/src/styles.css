@@ -1,0 +1,41 @@
+.booking-system {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.booking-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  text-align: center;
+}
+
+.booking-form {
+  text-align: center;
+}
+
+.service-selection {
+  margin-bottom: 20px;
+}
+
+.date-time-selection {
+  margin-bottom: 20px;
+}
+
+.confirm-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-button:hover {
+  background-color: #0056b3;
+}

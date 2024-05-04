@@ -1,73 +1,62 @@
-import React, { useState } from "react";
-import "./App.css";
-// import SourceDestinationSelection from "./components/SourceDestinationSelection";
-// import SeatSelection from "./components/SeatSelection";
-// import BookingConfirmation from "./components/BookingConfirmation";
+import React, { useState } from 'react';
+import "./styles.css";
 
-import SourceDestinationSelection from "./Components/SourceDestinationSelection";
-import SeatSelection from "./Components/SeatSelection";
-import BookingConfirmation from "./Components/BookingConfirmation";
+  const BookingSystem = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
+  const [selectedDateTime, setSelectedDateTime] = useState('');
 
-function App() {
-  const [step, setStep] = useState(1);
-  const [source, setSource] = useState("");
-  const [destination, setDestination] = useState("");
-  const [selectedSeat, setSelectedSeat] = useState("");
-
-  const handleSourceDestinationSelection = (source, destination) => {
-    setSource(source);
-    setDestination(destination);
-    setStep(2);
+  const handleLogin = () => {
+    setLoggedIn(true);
   };
 
-  const handleSeatSelection = (seat) => {
-    setSelectedSeat(seat);
-    setStep(3);
+  const handleServiceSelection = (service) => {
+    setSelectedService(service);
+  };
+
+  const handleDateTimeSelection = (dateTime) => {
+    setSelectedDateTime(dateTime);
   };
 
   const handleBookingConfirmation = () => {
-    setStep(4);
-  };
-
-  const handleBookingCancel = () => {
-    setSource("");
-    setDestination("");
-    setSelectedSeat("");
-    setStep(1);
+    if (selectedService && selectedDateTime) {
+      alert(`Booking confirmed for ${selectedService} on ${selectedDateTime}`);
+    } else {
+      alert('Please select a service and date/time');
+    }
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Flight Reservation</h1>
-      </header>
-      <main>
-        {step === 1 && (
-          <SourceDestinationSelection
-            onSelection={handleSourceDestinationSelection}
-          />
-        )}
-        {step === 2 && (
-          <SeatSelection
-            source={source}
-            destination={destination}
-            onSeatSelection={handleSeatSelection}
-            onCancel={handleBookingCancel}
-          />
-        )}
-        {step === 3 && (
-          <BookingConfirmation
-            source={source}
-            destination={destination}
-            selectedSeat={selectedSeat}
-            onConfirm={handleBookingConfirmation}
-            onCancel={handleBookingCancel}
-          />
-        )}
-        {step === 4 && <h2>Booking Confirmed!</h2>}
-      </main>
+    <div className="booking-system">
+      <div className="booking-header">
+        <h1>Reservation/Booking System</h1>
+      </div>
+      {!loggedIn ? (
+        <div className="login-form">
+          <h2>Please log in to continue</h2>
+          <button onClick={handleLogin}>Log In</button>
+        </div>
+      ) : (
+        <div className="booking-form">
+          <h2>Welcome! Select a service and date/time to book</h2>
+          <div className="service-selection">
+            <h3>Services:</h3>
+            <button onClick={() => handleServiceSelection('Hotel')}>Hotel</button>
+            <button onClick={() => handleServiceSelection('Flight')}>Flight</button>
+            <button onClick={() => handleServiceSelection('Restaurant')}>Restaurant</button>
+          </div>
+          {selectedService && (
+            <div className="date-time-selection">
+              <h3>Select Date and Time:</h3>
+              <input type="datetime-local" onChange={(e) => handleDateTimeSelection(e.target.value)} />
+            </div>
+          )}
+          <button className="confirm-button" onClick={handleBookingConfirmation}>Confirm Booking</button>
+        </div>
+      )}
     </div>
   );
-}
+};
 
-export default App;
+export default BookingSystem;
+
